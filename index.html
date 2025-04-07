@@ -130,7 +130,7 @@
             console.log(uploadUrl)
 
             try {
-                const response = await fetch(`http://dadserver-production.up.railway.app${uploadUrl}`, {
+                const response = await fetch(`https://dadserver-production.up.railway.app${uploadUrl}`, {
                     method: 'POST',
                     body: formData,
                 });
