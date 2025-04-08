@@ -65,6 +65,14 @@
         <button id="uploadBtn036">Upload and Generate Excel</button>
         <div id="responseMessage036"></div>
     </div>
+    <div class="container">
+        <h2>Excel To Word</h2>
+        <input type="file" id="pdfFileWord" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
+
+        <br>
+        <button id="uploadBtnWord">Upload and Generate Excel</button>
+        <div id="responseMessageWord"></div>
+    </div>
 
     <script>
         document.getElementById('uploadBtn').addEventListener('click', async function() {
@@ -144,6 +152,48 @@
                 const link = document.createElement('a');
                 link.href = URL.createObjectURL(blob);
                 link.download = 'result.xlsx';  // File name for the download
+                link.click();
+
+                document.getElementById('responseMessage').textContent = 'Download started!';
+            } catch (error) {
+                document.getElementById('responseMessage').textContent = 'Error uploading file!';
+            }
+        });
+        document.getElementById('uploadBtnWord').addEventListener('click', async function(e) {
+            e.preventDefault();
+            const fileInput = document.getElementById('pdfFileWord');
+            const file = fileInput.files[0];
+
+            if (!file) {
+                alert('Please select a file first!');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            // Show the user that the upload is in progress
+            document.getElementById('responseMessageWord').textContent = 'Uploading... Please wait.';
+
+
+            // https://dadserver-production.up.railway.app
+
+
+            try {
+                const response = await fetch(`https://dadserver-production.up.railway.app/word`, {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                if (!response.ok) {
+                    throw new Error('Something went wrong with the file upload');
+                }
+
+                // Get the file as a blob and trigger a download
+                const blob = await response.blob();
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = 'result.docx';  // File name for the download
                 link.click();
 
                 document.getElementById('responseMessage').textContent = 'Download started!';
